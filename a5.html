@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paşam Döner | Premium Lezzetin Adresi</title>
+    
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-gold: #FFD700;
+            --secondary-gold: #FFA500;
+            --accent-orange: #FF6B35;
+            --deep-blue: #0A0A2A;
+            --premium-purple: #4A00E0;
+            --luxury-bronze: #CD7F32;
+            --platinum: #E5E4E2;
+            --text-white: #FFFFFF;
+            --text-gold: linear-gradient(135deg, #FFD700, #FFA500, #FF8C00);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: auto;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--deep-blue) 0%, #1A1A4A 50%, #2D2D6A 100%);
+            color: var(--text-white);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            padding: 0;
+        }
+
+        /* Luxury Background Effects */
+        .luxury-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(74, 0, 224, 0.05) 0%, transparent 50%);
+            z-index: -3;
+        }
+
+        .premium-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(30deg, rgba(255, 215, 0, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(255, 215, 0, 0.03) 87.5%, rgba(255, 215, 0, 0.03)),
+                linear-gradient(150deg, rgba(255, 215, 0, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(255, 215, 0, 0.03) 87.5%, rgba(255, 215, 0, 0.03));
+            background-size: 80px 140px;
+            background-position: 0 0, 40px 70px;
+            z-index: -2;
+            opacity: 0.4;
+        }
+
+        .luxury-glow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle, rgba(255,215,0,0.05) 0%, transparent 70%);
+            filter: blur(60px);
+            z-index: -2;
+            animation: glow-pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        /* Main Container - Mobile Optimized */
+        .main-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 20px 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .content-wrapper {
+            max-width: 500px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+        }
+
+        /* Premium Logo Design - Mobile Optimized */
+        .logo-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .premium-logo {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .logo-outer-ring {
+            width: 100%;
+            height: 100%;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-gold), var(--secondary-gold), var(--accent-orange), var(--luxury-bronze)) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: rotate 20s linear infinite;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .logo-inner-glow {
+            width: 94%;
+            height: 94%;
+            position: absolute;
+            top: 3%;
+            left: 3%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, transparent 70%);
+            filter: blur(8px);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .logo-main {
+            width: 90%;
+            height: 90%;
+            position: absolute;
+            top: 5%;
+            left: 5%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1A1A4A, #2D2D6A);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 
+                inset 0 0 30px rgba(255, 215, 0, 0.1),
+                0 0 50px rgba(255, 107, 53, 0.2);
+        }
+
+        .doner-animation {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .doner-spit {
+            width: 30px;
+            height: 90px;
+            background: linear-gradient(45deg, #8B4513, #A0522D, #CD853F);
+            border-radius: 15px;
+            position: relative;
+            animation: rotate 8s linear infinite;
+            box-shadow: 
+                inset 0 0 15px rgba(0,0,0,0.5),
+                0 0 20px rgba(205, 133, 63, 0.4);
+        }
+
+        .doner-meat {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                #8B4513 0deg 30deg,
+                #A0522D 30deg 60deg,
+                #CD853F 60deg 90deg,
+                #D2691E 90deg 120deg,
+                #8B4513 120deg 150deg,
+                #A0522D 150deg 180deg,
+                #CD853F 180deg 210deg,
+                #D2691E 210deg 240deg,
+                #8B4513 240deg 270deg,
+                #A0522D 270deg 300deg,
+                #CD853F 300deg 330deg,
+                #D2691E 330deg 360deg
+            );
+            animation: rotate 15s linear infinite reverse;
+            box-shadow: 
+                0 0 25px rgba(139, 69, 19, 0.6),
+                inset 0 0 15px rgba(0,0,0,0.3);
+        }
+
+        .logo-text {
+            text-align: center;
+        }
+
+        .logo-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: var(--text-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+            letter-spacing: 1.5px;
+        }
+
+        /* Content Section - Mobile Optimized */
+        .content-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            text-align: center;
+        }
+
+        .premium-header {
+            margin-bottom: 20px;
+        }
+
+        .main-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: var(--text-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--platinum);
+            font-weight: 300;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            padding: 0 10px;
+        }
+
+        .announcement-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--accent-orange), var(--secondary-gold));
+            padding: 10px 16px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            margin-top: 8px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Premium Buttons - Mobile Optimized */
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        .premium-btn {
+            padding: 16px 20px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-gold), var(--secondary-gold));
+            color: var(--deep-blue);
+            box-shadow: 
+                0 6px 20px rgba(255, 215, 0, 0.4),
+                0 0 0 1px rgba(255, 215, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--premium-purple), #8E2DE2);
+            color: var(--text-white);
+            box-shadow: 
+                0 6px 20px rgba(74, 0, 224, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .premium-btn:active {
+            transform: translateY(2px);
+            box-shadow: 
+                0 3px 10px rgba(255, 215, 0, 0.4),
+                0 0 0 1px rgba(255, 215, 0, 0.2);
+        }
+
+        /* Social Icons - Mobile Optimized */
+        .social-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .social-title {
+            font-size: 0.9rem;
+            color: var(--platinum);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+            opacity: 0.7;
+        }
+
+        .social-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .social-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            flex: 1;
+            min-width: 0;
+        }
+
+        .social-card:active {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(2px);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .social-icon {
+            font-size: 1.4rem;
+            margin-bottom: 6px;
+        }
+
+        .social-card.instagram .social-icon {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .social-card.phone .social-icon {
+            color: var(--primary-gold);
+        }
+
+        .social-card.map .social-icon {
+            color: var(--accent-orange);
+        }
+
+        .social-label {
+            font-size: 0.75rem;
+            color: var(--platinum);
+            font-weight: 500;
+        }
+
+        /* Luxury Footer - Mobile Optimized */
+        .luxury-footer {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            width: 100%;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            color: var(--platinum);
+            font-weight: 400;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        /* Animations */
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Floating Elements */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 40px;
+            height: 40px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            top: 70%;
+            left: 80%;
+            animation-delay: 2s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 30px;
+            height: 30px;
+            top: 80%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        /* Crystal Shards */
+        .crystal-shards {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .shard {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.8);
+            transform: rotate(45deg);
+            animation: sparkle 4s linear infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        /* Tablet and Desktop Styles */
+        @media (min-width: 768px) {
+            .main-container {
+                justify-content: center;
+                padding: 30px;
+            }
+            
+            .content-wrapper {
+                max-width: 700px;
+                gap: 40px;
+            }
+            
+            .premium-logo {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .main-title {
+                font-size: 2.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .button-container {
+                flex-direction: row;
+                gap: 15px;
+            }
+            
+            .premium-btn {
+                padding: 18px 25px;
+            }
+            
+            .footer-text {
+                flex-direction: row;
+                gap: 10px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .content-wrapper {
+                max-width: 1000px;
+                flex-direction: row;
+                gap: 60px;
+            }
+            
+            .logo-section {
+                flex: 1;
+            }
+            
+            .content-section {
+                flex: 1;
+                text-align: left;
+                align-items: flex-start;
+            }
+            
+            .subtitle {
+                padding: 0;
+            }
+            
+            .announcement-badge {
+                margin-left: 0;
+            }
+            
+            .button-container {
+                justify-content: flex-start;
+            }
+            
+            .social-grid {
+                justify-content: flex-start;
+            }
+            
+            .social-card {
+                flex: 0 1 auto;
+                min-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ultra Premium Background -->
+    <div class="luxury-bg"></div>
+    <div class="premium-pattern"></div>
+    <div class="luxury-glow"></div>
+    
+    <!-- Floating Elements -->
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <!-- Crystal Shards -->
+    <div class="crystal-shards" id="crystalShards"></div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="content-wrapper">
+            <!-- Logo Section -->
+            <div class="logo-section">
+                <div class="premium-logo">
+                    <div class="logo-outer-ring"></div>
+                    <div class="logo-inner-glow"></div>
+                    <div class="logo-main">
+                        <div class="doner-animation">
+                            <div class="doner-spit"></div>
+                            <div class="doner-meat"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="logo-text">
+                    <div class="logo-title">PAŞAM DÖNER</div>
+                </div>
+            </div>
+
+            <!-- Content Section -->
+            <div class="content-section">
+                <div class="premium-header">
+                    <h1 class="main-title">Kadirli'nin<br>En Kaliteli Lezzeti</h1>
+                    <p class="subtitle">Geleneksel tadın modern yorumu ile hazırlanan enfes dönerlerimizle hizmetinizdeyiz.</p>
+                    <div class="announcement-badge">
+                        <i class="fas fa-star" style="margin-right: 6px;"></i>
+                        🎉 Yeni Ürünler Yakında! 🎉
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="button-container">
+                    <button class="premium-btn btn-primary" id="menuBrowseBtn">
+                        <i class="fas fa-book-open" style="margin-right: 8px;"></i>
+                        Menüyü İncele
+                    </button>
+                    <button class="premium-btn btn-secondary" id="menuOrderBtn">
+                        <i class="fas fa-shopping-cart" style="margin-right: 8px;"></i>
+                        Hemen Sipariş Ver
+                    </button>
+                </div>
+
+                <!-- Social Section -->
+                <div class="social-section">
+                    <div class="social-title">Bizi Takip Edin</div>
+                    <div class="social-grid">
+                        <div class="social-card instagram" id="instagramBtn">
+                            <div class="social-icon">
+                                <i class="fab fa-instagram"></i>
+                            </div>
+                            <div class="social-label">Instagram</div>
+                        </div>
+                        <div class="social-card phone" id="phoneBtn">
+                            <div class="social-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="social-label">Telefon</div>
+                        </div>
+                        <div class="social-card map" id="mapBtn">
+                            <div class="social-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="social-label">Konum</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Luxury Footer -->
+                <div class="luxury-footer">
+                    <div class="footer-text">
+                        <i class="fas fa-clock"></i>
+                        <span>📅 Pazar Günleri Kapalıyız</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Button Functionality
+        document.getElementById('menuBrowseBtn').addEventListener('click', function() {
+            window.open('https://mektepiq1.github.io/pasammenu/t14.html', '_blank');
+        });
+
+        document.getElementById('menuOrderBtn').addEventListener('click', function() {
+            window.open('https://mektepiq1.github.io/musteri/u23.html', '_blank');
+        });
+
+        document.getElementById('instagramBtn').addEventListener('click', function() {
+            window.open('https://www.instagram.com/kadirli_pasam_doner?igsh=dW1xZ245YWdxaW4y', '_blank');
+        });
+
+        document.getElementById('phoneBtn').addEventListener('click', function() {
+            window.location.href = 'tel:05557918718';
+        });
+
+        document.getElementById('mapBtn').addEventListener('click', function() {
+            window.open('https://maps.app.goo.gl/kieU5MrRQvoMrtof7', '_blank');
+        });
+
+        // Create Crystal Shards
+        function createCrystalShards() {
+            const container = document.getElementById('crystalShards');
+            for (let i = 0; i < 25; i++) {
+                const shard = document.createElement('div');
+                shard.className = 'shard';
+                shard.style.left = Math.random() * 100 + '%';
+                shard.style.top = Math.random() * 100 + '%';
+                shard.style.animationDelay = Math.random() * 4 + 's';
+                shard.style.animationDuration = (2 + Math.random() * 3) + 's';
+                container.appendChild(shard);
+            }
+        }
+
+        // Initialize effects
+        window.addEventListener('load', function() {
+            createCrystalShards();
+            
+            // Add loading animation
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 1s ease-in-out';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
