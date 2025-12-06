@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Mutfak Tasarım Uygulaması</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 30px;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+
+        /* Form Stilleri */
+        .form-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            color: #1e293b;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3b82f6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #3b82f6;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: #f8fafc;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .unit {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-left: 5px;
+        }
+
+        /* Butonlar */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .primary-btn {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .secondary-btn {
+            background-color: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+
+        .secondary-btn:hover {
+            background-color: #e2e8f0;
+        }
+
+        /* Görselleştirme Alanı */
+        .visualization-section {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .design-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            min-height: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .design-title {
+            font-size: 1.4rem;
+            color: #1e293b;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toggle-view {
+            display: flex;
+            gap: 10px;
+            background: #f1f5f9;
+            padding: 5px;
+            border-radius: 8px;
+        }
+
+        .toggle-btn {
+            padding: 8px 15px;
+            border-radius: 6px;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .toggle-btn.active {
+            background: white;
+            color: #3b82f6;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Çizim Alanı */
+        .kitchen-design {
+            position: relative;
+            height: 500px;
+            background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            overflow: auto;
+            padding: 20px;
+        }
+
+        .wall {
+            position: absolute;
+            background: linear-gradient(to bottom, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #92400e;
+        }
+
+        .base-cabinet {
+            position: absolute;
+            background: linear-gradient(to bottom, #d1d5db, #9ca3af);
+            border: 1px solid #6b7280;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .base-cabinet:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .wall-cabinet {
+            position: absolute;
+            background: linear-gradient(to bottom, #a5b4fc, #818cf8);
+            border: 1px solid #4f46e5;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .appliance {
+            position: absolute;
+            background: linear-gradient(to bottom, #fca5a5, #f87171);
+            border: 1px solid #dc2626;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .countertop {
+            position: absolute;
+            background: linear-gradient(to right, #78716c, #57534e);
+            border: 1px solid #44403c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .window {
+            position: absolute;
+            background: linear-gradient(to bottom, #e0f2fe, #bae6fd);
+            border: 2px solid #0ea5e9;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0369a1;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .door {
+            position: absolute;
+            background: linear-gradient(to bottom, #fef3c7, #fde68a);
+            border: 2px solid #d97706;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #92400e;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .utility {
+            position: absolute;
+            background: linear-gradient(to bottom, #bbf7d0, #86efac);
+            border: 2px solid #16a34a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #166534;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .dimension-label {
+            position: absolute;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #475569;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px solid #cbd5e1;
+            z-index: 10;
+        }
+
+        /* Sonuçlar Paneli */
+        .results-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .result-card {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .result-card h4 {
+            font-size: 1rem;
+            color: #475569;
+            margin-bottom: 10px;
+        }
+
+        .result-card p {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-section {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1><i class="fas fa-ruler-combined"></i> Ziyanoğlu Mutfak Tasarım Uygulaması</h1>
+            <p>Ölçülerinizi girin, otomatik mutfak tasarımınızı oluşturun</p>
+        </div>
+        
+        <div class="form-section">
+            <h2 class="section-title"><i class="fas fa-pencil-ruler"></i> Mutfak Ölçüleri</h2>
+            
+            <div class="form-group">
+                <label>Duvar Uzunlukları (cm)</label>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="wallA">Duvar A</label>
+                        <input type="number" id="wallA" value="400" min="100" max="1000">
+                    </div>
+                    <div class="form-group">
+                        <label for="wallB">Duvar B</label>
+                        <input type="number" id="wallB" value="350" min="100" max="1000">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="wallC">Duvar C</label>
+                        <input type="number" id="wallC" value="0" min="0" max="1000">
+                    </div>
+                    <div class="form-group">
+                        <label for="wallD">Duvar D</label>
+                        <input type="number" id="wallD" value="0" min="0" max="1000">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="ceilingHeight">Tavan Yüksekliği (cm)</label>
+                <input type="number" id="ceilingHeight" value="270" min="220" max="350">
+            </div>
+            
+            <div class="form-group">
+                <label for="counterHeight">Tezgah Yüksekliği (cm)</label>
+                <input type="number" id="counterHeight" value="90" min="80" max="110">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="baseDepth">Alt Dolap Derinliği (cm)</label>
+                    <input type="number" id="baseDepth" value="60" min="40" max="80">
+                </div>
+                <div class="form-group">
+                    <label for="wallDepth">Üst Dolap Derinliği (cm)</label>
+                    <input type="number" id="wallDepth" value="35" min="30" max="45">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Kapı ve Pencere Ölçüleri (cm)</label>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="doorWidth">Kapı Genişliği</label>
+                        <input type="number" id="doorWidth" value="80" min="0" max="200">
+                    </div>
+                    <div class="form-group">
+                        <label for="windowWidth">Pencere Genişliği</label>
+                        <input type="number" id="windowWidth" value="120" min="0" max="300">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Cihaz Boşlukları (cm)</label>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fridgeWidth">Buzdolabı</label>
+                        <input type="number" id="fridgeWidth" value="60" min="0" max="120">
+                    </div>
+                    <div class="form-group">
+                        <label for="ovenWidth">Fırın</label>
+                        <input type="number" id="ovenWidth" value="60" min="0" max="90">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dishwasherWidth">Bulaşık Makinesi</label>
+                        <input type="number" id="dishwasherWidth" value="60" min="0" max="90">
+                    </div>
+                    <div class="form-group">
+                        <label for="hoodWidth">Aspiratör</label>
+                        <input type="number" id="hoodWidth" value="90" min="0" max="120">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button class="primary-btn" id="calculateBtn">
+                    <i class="fas fa-calculator"></i> Tasarımı Hesapla
+                </button>
+                <button class="secondary-btn" id="resetBtn">
+                    <i class="fas fa-redo"></i> Sıfırla
+                </button>
+            </div>
+            
+            <div class="button-group">
+                <button class="secondary-btn" id="exportBtn">
+                    <i class="fas fa-download"></i> JSON Olarak İndir
+                </button>
+                <button class="secondary-btn" id="sampleBtn">
+                    <i class="fas fa-vial"></i> Örnek Yükle
+                </button>
+            </div>
+        </div>
+        
+        <div class="visualization-section">
+            <div class="design-container">
+                <div class="design-title">
+                    <h3><i class="fas fa-cube"></i> Mutfak Tasarımı</h3>
+                    <div class="toggle-view">
+                        <button class="toggle-btn active" id="view2D">2D Görünüm</button>
+                        <button class="toggle-btn" id="view3D">3D Görünüm</button>
+                        <button class="toggle-btn" id="viewList">Liste Görünümü</button>
+                    </div>
+                </div>
+                
+                <div class="kitchen-design" id="kitchenDesign">
+                    <!-- Tasarım burada oluşturulacak -->
+                    <div class="instructions">
+                        <p style="text-align: center; margin-top: 200px; color: #64748b; font-size: 1.2rem;">
+                            <i class="fas fa-arrow-up" style="display: block; font-size: 3rem; margin-bottom: 20px; color: #cbd5e1;"></i>
+                            Ölçüleri girin ve "Tasarımı Hesapla" butonuna tıklayın
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="results-panel">
+                <h3 class="section-title"><i class="fas fa-chart-bar"></i> Hesaplama Sonuçları</h3>
+                <div class="results-grid" id="resultsGrid">
+                    <!-- Sonuçlar burada görüntülenecek -->
+                    <div class="result-card">
+                        <h4>Toplam Alt Dolap Sayısı</h4>
+                        <p id="totalBaseCabinets">0</p>
+                    </div>
+                    <div class="result-card">
+                        <h4>Toplam Üst Dolap Sayısı</h4>
+                        <p id="totalWallCabinets">0</p>
+                    </div>
+                    <div class="result-card">
+                        <h4>Kullanılan Duvar Uzunluğu</h4>
+                        <p id="usedWallLength">0 cm</p>
+                    </div>
+                    <div class="result-card">
+                        <h4>Kalan Boşluk</h4>
+                        <p id="remainingSpace">0 cm</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Uygulama verileri
+        const designData = {
+            walls: {},
+            cabinets: {
+                base: [],
+                wall: []
+            },
+            appliances: [],
+            openings: [],
+            utilities: [],
+            calculations: {},
+            jsonData: null
+        };
+
+        // Standart modül ölçüleri (cm)
+        const STANDARD_MODULES = [30, 40, 45, 50, 60, 80, 90];
+        const GAP_BETWEEN_MODULES = 0.2; // 2mm
+        const DOOR_CLEARANCE = 0.3; // 3mm
+        const WALL_CLEARANCE = 1.0; // 10mm
+        const VENTILATION_GAP = 5.0; // 50mm
+
+        // DOM elementleri
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const exportBtn = document.getElementById('exportBtn');
+        const sampleBtn = document.getElementById('sampleBtn');
+        const kitchenDesign = document.getElementById('kitchenDesign');
+        const view2D = document.getElementById('view2D');
+        const view3D = document.getElementById('view3D');
+        const viewList = document.getElementById('viewList');
+
+        // Görünüm değiştirme
+        view2D.addEventListener('click', () => {
+            view2D.classList.add('active');
+            view3D.classList.remove('active');
+            viewList.classList.remove('active');
+            render2DDesign();
+        });
+
+        view3D.addEventListener('click', () => {
+            view3D.classList.add('active');
+            view2D.classList.remove('active');
+            viewList.classList.remove('active');
+            render3DDesign();
+        });
+
+        viewList.addEventListener('click', () => {
+            viewList.classList.add('active');
+            view2D.classList.remove('active');
+            view3D.classList.remove('active');
+            renderListDesign();
+        });
+
+        // Ölçüleri topla
+        function gatherInputs() {
+            return {
+                wallA: parseFloat(document.getElementById('wallA').value) || 0,
+                wallB: parseFloat(document.getElementById('wallB').value) || 0,
+                wallC: parseFloat(document.getElementById('wallC').value) || 0,
+                wallD: parseFloat(document.getElementById('wallD').value) || 0,
+                ceilingHeight: parseFloat(document.getElementById('ceilingHeight').value) || 270,
+                counterHeight: parseFloat(document.getElementById('counterHeight').value) || 90,
+                baseDepth: parseFloat(document.getElementById('baseDepth').value) || 60,
+                wallDepth: parseFloat(document.getElementById('wallDepth').value) || 35,
+                doorWidth: parseFloat(document.getElementById('doorWidth').value) || 0,
+                windowWidth: parseFloat(document.getElementById('windowWidth').value) || 0,
+                fridgeWidth: parseFloat(document.getElementById('fridgeWidth').value) || 0,
+                ovenWidth: parseFloat(document.getElementById('ovenWidth').value) || 0,
+                dishwasherWidth: parseFloat(document.getElementById('dishwasherWidth').value) || 0,
+                hoodWidth: parseFloat(document.getElementById('hoodWidth').value) || 0
+            };
+        }
+
+        // Marangoz mantığında hesaplama
+        function calculateCarpentryLogic(inputs) {
+            const results = {
+                totalBaseCabinets: 0,
+                totalWallCabinets: 0,
+                usedWallLength: 0,
+                remainingSpace: 0,
+                baseModules: [],
+                wallModules: [],
+                cornerCabinets: {
+                    base: 0,
+                    wall: 0
+                },
+                gaps: {
+                    betweenModules: GAP_BETWEEN_MODULES,
+                    doorClearance: DOOR_CLEARANCE,
+                    wallClearance: WALL_CLEARANCE,
+                    ventilation: VENTILATION_GAP
+                }
+            };
+
+            // Duvar A için modül hesaplaması
+            const wallALength = inputs.wallA;
+            let remainingWall = wallALength - (2 * WALL_CLEARANCE);
+            
+            // Buzdolabı boşluğu
+            if (inputs.fridgeWidth > 0) {
+                const fridgeSpace = inputs.fridgeWidth + VENTILATION_GAP;
+                results.baseModules.push({
+                    type: 'appliance',
+                    name: 'Buzdolabı',
+                    width: fridgeSpace,
+                    position: WALL_CLEARANCE,
+                    depth: inputs.baseDepth + 5
+                });
+                remainingWall -= fridgeSpace + GAP_BETWEEN_MODULES;
+            }
+            
+            // Alt dolapları yerleştir
+            let currentPosition = WALL_CLEARANCE + (inputs.fridgeWidth > 0 ? inputs.fridgeWidth + VENTILATION_GAP + GAP_BETWEEN_MODULES : 0);
+            
+            // Modülleri otomatik yerleştirme algoritması
+            while (remainingWall > 0) {
+                // Kalan duvar uzunluğuna uygun en büyük modülü bul
+                let selectedModule = 0;
+                for (let module of STANDARD_MODULES) {
+                    if (module <= remainingWall + GAP_BETWEEN_MODULES) {
+                        selectedModule = module;
+                    }
+                }
+                
+                if (selectedModule === 0) {
+                    // Kalan kısım pay olarak eklenir
+                    results.remainingSpace = remainingWall;
+                    break;
+                }
+                
+                // Modülü ekle
+                results.baseModules.push({
+                    type: 'base',
+                    width: selectedModule,
+                    position: currentPosition,
+                    depth: inputs.baseDepth
+                });
+                
+                results.totalBaseCabinets++;
+                currentPosition += selectedModule + GAP_BETWEEN_MODULES;
+                remainingWall -= selectedModule + GAP_BETWEEN_MODULES;
+            }
+            
+            // Üst dolapları hesapla (alt dolaplarla aynı genişlikte)
+            results.wallModules = results.baseModules.filter(module => module.type === 'base').map(module => ({
+                type: 'wall',
+                width: module.width,
+                position: module.position,
+                depth: inputs.wallDepth,
+                height: 70 // Standart üst dolap yüksekliği
+            }));
+            
+            results.totalWallCabinets = results.wallModules.length;
+            
+            // Aspiratör ekle
+            if (inputs.hoodWidth > 0) {
+                results.wallModules.push({
+                    type: 'appliance',
+                    name: 'Aspiratör',
+                    width: inputs.hoodWidth,
+                    position: wallALength / 2 - inputs.hoodWidth / 2,
+                    depth: inputs.wallDepth,
+                    height: 30
+                });
+            }
+            
+            // Tezgah yüksekliği ve üst dolap arasındaki boşluk
+            const counterToWallCabinet = 55; // Standart 55-60 cm
+            
+            // Kullanılan duvar uzunluğu
+            results.usedWallLength = wallALength - remainingWall;
+            
+            return results;
+        }
+
+        // 2D tasarımı render et
+        function render2DDesign() {
+            if (!designData.calculations.baseModules) return;
+            
+            const inputs = gatherInputs();
+            const calculations = designData.calculations;
+            const scale = 1.5; // Çizim ölçeği
+            
+            kitchenDesign.innerHTML = '';
+            
+            // Duvar çiz
+            const wall = document.createElement('div');
+            wall.className = 'wall';
+            wall.style.width = `${inputs.wallA * scale}px`;
+            wall.style.height = `${inputs.ceilingHeight * scale}px`;
+            wall.style.left = '50px';
+            wall.style.top = '50px';
+            wall.textContent = `Duvar A: ${inputs.wallA}cm`;
+            kitchenDesign.appendChild(wall);
+            
+            // Zemin çizgisi
+            const floorLine = document.createElement('div');
+            floorLine.style.position = 'absolute';
+            floorLine.style.width = `${inputs.wallA * scale}px`;
+            floorLine.style.height = '3px';
+            floorLine.style.backgroundColor = '#78716c';
+            floorLine.style.left = '50px';
+            floorLine.style.top = `${50 + inputs.ceilingHeight * scale}px`;
+            kitchenDesign.appendChild(floorLine);
+            
+            // Alt dolapları çiz
+            calculations.baseModules.forEach((module, index) => {
+                const cabinet = document.createElement('div');
+                cabinet.className = module.type === 'appliance' ? 'appliance' : 'base-cabinet';
+                cabinet.style.width = `${module.width * scale}px`;
+                cabinet.style.height = `${inputs.counterHeight * scale}px`;
+                cabinet.style.left = `${50 + module.position * scale}px`;
+                cabinet.style.top = `${50 + (inputs.ceilingHeight - inputs.counterHeight) * scale}px`;
+                cabinet.textContent = module.name ? module.name : `${module.width}cm`;
+                cabinet.title = `${module.width}cm genişlik`;
+                kitchenDesign.appendChild(cabinet);
+                
+                // Genişlik etiketi
+                const label = document.createElement('div');
+                label.className = 'dimension-label';
+                label.style.left = `${50 + module.position * scale}px`;
+                label.style.top = `${45 + (inputs.ceilingHeight - inputs.counterHeight) * scale}px`;
+                label.textContent = `${module.width}cm`;
+                kitchenDesign.appendChild(label);
+            });
+            
+            // Tezgah çiz
+            const countertop = document.createElement('div');
+            countertop.className = 'countertop';
+            countertop.style.width = `${inputs.wallA * scale}px`;
+            countertop.style.height = '10px';
+            countertop.style.left = '50px';
+            countertop.style.top = `${50 + (inputs.ceilingHeight - inputs.counterHeight) * scale}px`;
+            countertop.textContent = 'Tezgah';
+            kitchenDesign.appendChild(countertop);
+            
+            // Üst dolapları çiz
+            calculations.wallModules.forEach((module, index) => {
+                if (module.type === 'wall') {
+                    const wallCabinet = document.createElement('div');
+                    wallCabinet.className = 'wall-cabinet';
+                    wallCabinet.style.width = `${module.width * scale}px`;
+                    wallCabinet.style.height = `${module.height * scale}px`;
+                    wallCabinet.style.left = `${50 + module.position * scale}px`;
+                    wallCabinet.style.top = `${50 + (inputs.ceilingHeight - inputs.counterHeight - 55 - module.height) * scale}px`;
+                    wallCabinet.textContent = `${module.width}cm`;
+                    wallCabinet.title = `${module.width}cm genişlik, ${module.height}cm yükseklik`;
+                    kitchenDesign.appendChild(wallCabinet);
+                } else if (module.type === 'appliance') {
+                    // Aspiratör
+                    const hood = document.createElement('div');
+                    hood.className = 'appliance';
+                    hood.style.width = `${module.width * scale}px`;
+                    hood.style.height = `${module.height * scale}px`;
+                    hood.style.left = `${50 + module.position * scale}px`;
+                    hood.style.top = `${50 + (inputs.ceilingHeight - inputs.counterHeight - 55 - module.height) * scale}px`;
+                    hood.textContent = module.name;
+                    hood.title = `${module.width}cm genişlik`;
+                    kitchenDesign.appendChild(hood);
+                }
+            });
+            
+            // Pencere çiz (varsa)
+            if (inputs.windowWidth > 0) {
+                const window = document.createElement('div');
+                window.className = 'window';
+                window.style.width = `${inputs.windowWidth * scale}px`;
+                window.style.height = '80px';
+                window.style.left = `${50 + (inputs.wallA - inputs.windowWidth) / 2 * scale}px`;
+                window.style.top = `${50 + 100}px`; // Tavandan 100cm aşağıda
+                window.textContent = 'Pencere';
+                kitchenDesign.appendChild(window);
+            }
+            
+            // Kapı çiz (varsa)
+            if (inputs.doorWidth > 0) {
+                const door = document.createElement('div');
+                door.className = 'door';
+                door.style.width = `${inputs.doorWidth * scale}px`;
+                door.style.height = `${200 * scale}px`;
+                door.style.left = `${50 + 20 * scale}px`; // Duvarın başından 20cm içeride
+                door.style.top = `${50 + (inputs.ceilingHeight - 200) * scale}px`;
+                door.textContent = 'Kapı';
+                kitchenDesign.appendChild(door);
+            }
+            
+            // Su tesisatı ve elektrik prizleri
+            const utilities = [
+                { type: 'water', name: 'Su', x: 100, y: inputs.ceilingHeight - 30 },
+                { type: 'electric', name: 'Elektrik', x: 200, y: inputs.ceilingHeight - 30 },
+                { type: 'electric', name: 'Elektrik', x: 300, y: inputs.ceilingHeight - 30 }
+            ];
+            
+            utilities.forEach(utility => {
+                const util = document.createElement('div');
+                util.className = 'utility';
+                util.style.width = '30px';
+                util.style.height = '30px';
+                util.style.left = `${50 + utility.x * scale}px`;
+                util.style.top = `${50 + utility.y * scale}px`;
+                util.textContent = utility.type === 'water' ? 'S' : 'E';
+                util.title = utility.name;
+                kitchenDesign.appendChild(util);
+            });
+            
+            // Ölçek bilgisi
+            const scaleInfo = document.createElement('div');
+            scaleInfo.style.position = 'absolute';
+            scaleInfo.style.bottom = '10px';
+            scaleInfo.style.right = '10px';
+            scaleInfo.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+            scaleInfo.style.padding = '5px 10px';
+            scaleInfo.style.borderRadius = '4px';
+            scaleInfo.style.fontSize = '0.8rem';
+            scaleInfo.style.border = '1px solid #cbd5e1';
+            scaleInfo.textContent = `Ölçek: 1cm = ${scale}px`;
+            kitchenDesign.appendChild(scaleInfo);
+        }
+
+        // 3D tasarımı render et
+        function render3DDesign() {
+            kitchenDesign.innerHTML = `
+                <div style="text-align: center; padding: 100px 20px; color: #64748b;">
+                    <i class="fas fa-cube" style="font-size: 4rem; margin-bottom: 20px; color: #cbd5e1;"></i>
+                    <h3 style="margin-bottom: 15px;">3D Görünüm</h3>
+                    <p>3D görünüm önizlemesi geliştirme aşamasındadır.</p>
+                    <p style="margin-top: 20px;">Şu an için 2D görünümü kullanabilirsiniz.</p>
+                    <button class="toggle-btn active" onclick="document.getElementById('view2D').click()" style="margin-top: 20px;">
+                        2D Görünüme Dön
+                    </button>
+                </div>
+            `;
+        }
+
+        // Liste görünümü render et
+        function renderListDesign() {
+            if (!designData.calculations.baseModules) return;
+            
+            const calculations = designData.calculations;
+            let html = `
+                <div style="padding: 20px;">
+                    <h3 style="margin-bottom: 20px; color: #1e293b;">Modül Listesi</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                        <div>
+                            <h4 style="margin-bottom: 15px; color: #475569; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+                                Alt Dolaplar (${calculations.totalBaseCabinets} adet)
+                            </h4>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background-color: #f1f5f9;">
+                                        <th style="padding: 10px; text-align: left; border-bottom: 1px solid #cbd5e1;">Pozisyon</th>
+                                        <th style="padding: 10px; text-align: left; border-bottom: 1px solid #cbd5e1;">Genişlik</th>
+                                        <th style="padding: 10px; text-align: left; border-bottom: 1px solid #cbd5e1;">Tür</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+            `;
+            
+            calculations.baseModules.forEach((module, index) => {
+                html += `
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${module.position.toFixed(1)}cm</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${module.width}cm</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${module.type === 'appliance' ? module.name : 'Alt Dolap'}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <h4 style="margin-bottom: 15px; color: #475569; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+                                Üst Dolaplar (${calculations.totalWallCabinets} adet)
+                            </h4>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background-color: #f1f5f9;">
+                                        <th style="padding: 10px; text-align: left; border-bottom: 1px solid #cbd5e1;">Pozisyon</th>
+                                        <th style="padding: 10px; text-align: left; border-bottom: 1px solid #cbd5e1;">Genişlik</th>
+                                        <th style="padding: 10px; text-align: left; border-bottom: 1px solid #cbd5e1;">Yükseklik</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+            `;
+            
+            calculations.wallModules.forEach((module, index) => {
+                if (module.type === 'wall') {
+                    html += `
+                        <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${module.position.toFixed(1)}cm</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${module.width}cm</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${module.height}cm</td>
+                        </tr>
+                    `;
+                }
+            });
+            
+            html += `
+                                </tbody>
+                            </table>
+            `;
+            
+            if (calculations.wallModules.some(m => m.type === 'appliance')) {
+                html += `
+                            <h4 style="margin-top: 30px; margin-bottom: 15px; color: #475569; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+                                Cihazlar
+                            </h4>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background-color: #f1f5f9;">
+                                        <th style="padding: 10px; text-align: left; border-bottom: 1px solid #cbd5e1;">Ad</th>
+                                        <th style="padding: 10px; text-align: left; border-bottom: 1px solid #cbd5e1;">Genişlik</th>
+                                        <th style="padding: 10px; text-align: left; border-bottom: 1px solid #cbd5e1;">Pozisyon</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                `;
+                
+                calculations.wallModules.forEach((module, index) => {
+                    if (module.type === 'appliance') {
+                        html += `
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${module.name}</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${module.width}cm</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${module.position.toFixed(1)}cm</td>
+                            </tr>
+                        `;
+                    }
+                });
+                
+                html += `
+                                </tbody>
+                            </table>
+                `;
+            }
+            
+            html += `
+                        </div>
+                    </div>
+                    <div style="margin-top: 30px; padding: 20px; background-color: #f8fafc; border-radius: 8px;">
+                        <h4 style="margin-bottom: 15px; color: #475569;">Hesaplama Detayları</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
+                            <div>
+                                <strong>Modül Arası Boşluk:</strong> ${calculations.gaps.betweenModules}cm
+                            </div>
+                            <div>
+                                <strong>Kapak Payı:</strong> ${calculations.gaps.doorClearance}cm
+                            </div>
+                            <div>
+                                <strong>Duvar Payı:</strong> ${calculations.gaps.wallClearance}cm
+                            </div>
+                            <div>
+                                <strong>Havalandırma Boşluğu:</strong> ${calculations.gaps.ventilation}cm
+                            </div>
+                            <div>
+                                <strong>Kalan Boşluk:</strong> ${calculations.remainingSpace.toFixed(1)}cm
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            kitchenDesign.innerHTML = html;
+        }
+
+        // Sonuçları güncelle
+        function updateResults(calculations) {
+            document.getElementById('totalBaseCabinets').textContent = calculations.totalBaseCabinets;
+            document.getElementById('totalWallCabinets').textContent = calculations.totalWallCabinets;
+            document.getElementById('usedWallLength').textContent = `${calculations.usedWallLength.toFixed(1)} cm`;
+            document.getElementById('remainingSpace').textContent = `${calculations.remainingSpace.toFixed(1)} cm`;
+        }
+
+        // JSON verisini oluştur
+        function createJSONData(inputs, calculations) {
+            return {
+                metadata: {
+                    projectName: "Mutfak Tasarımı",
+                    created: new Date().toISOString(),
+                    version: "1.0"
+                },
+                inputs: inputs,
+                calculations: calculations,
+                modules: {
+                    base: calculations.baseModules,
+                    wall: calculations.wallModules
+                },
+                standards: {
+                    moduleSizes: STANDARD_MODULES,
+                    gaps: {
+                        betweenModules: GAP_BETWEEN_MODULES,
+                        doorClearance: DOOR_CLEARANCE,
+                        wallClearance: WALL_CLEARANCE,
+                        ventilation: VENTILATION_GAP
+                    },
+                    counterToWallCabinet: 55,
+                    wallCabinetHeight: 70,
+                    wallCabinetDepth: 35
+                }
+            };
+        }
+
+        // Hesaplama butonu işleyici
+        calculateBtn.addEventListener('click', () => {
+            const inputs = gatherInputs();
+            const calculations = calculateCarpentryLogic(inputs);
+            
+            // Verileri sakla
+            designData.inputs = inputs;
+            designData.calculations = calculations;
+            designData.jsonData = createJSONData(inputs, calculations);
+            
+            // Sonuçları güncelle
+            updateResults(calculations);
+            
+            // Tasarımı render et
+            render2DDesign();
+            
+            // Başarı mesajı
+            showNotification('Tasarım başarıyla oluşturuldu!', 'success');
+        });
+
+        // Sıfırlama butonu işleyici
+        resetBtn.addEventListener('click', () => {
+            document.getElementById('wallA').value = '400';
+            document.getElementById('wallB').value = '350';
+            document.getElementById('wallC').value = '0';
+            document.getElementById('wallD').value = '0';
+            document.getElementById('ceilingHeight').value = '270';
+            document.getElementById('counterHeight').value = '90';
+            document.getElementById('baseDepth').value = '60';
+            document.getElementById('wallDepth').value = '35';
+            document.getElementById('doorWidth').value = '80';
+            document.getElementById('windowWidth').value = '120';
+            document.getElementById('fridgeWidth').value = '60';
+            document.getElementById('ovenWidth').value = '60';
+            document.getElementById('dishwasherWidth').value = '60';
+            document.getElementById('hoodWidth').value = '90';
+            
+            // Sonuçları sıfırla
+            document.getElementById('totalBaseCabinets').textContent = '0';
+            document.getElementById('totalWallCabinets').textContent = '0';
+            document.getElementById('usedWallLength').textContent = '0 cm';
+            document.getElementById('remainingSpace').textContent = '0 cm';
+            
+            // Tasarım alanını temizle
+            kitchenDesign.innerHTML = `
+                <div class="instructions">
+                    <p style="text-align: center; margin-top: 200px; color: #64748b; font-size: 1.2rem;">
+                        <i class="fas fa-arrow-up" style="display: block; font-size: 3rem; margin-bottom: 20px; color: #cbd5e1;"></i>
+                        Ölçüleri girin ve "Tasarımı Hesapla" butonuna tıklayın
+                    </p>
+                </div>
+            `;
+            
+            // Verileri temizle
+            designData.jsonData = null;
+            
+            showNotification('Form sıfırlandı!', 'info');
+        });
+
+        // JSON indirme butonu işleyici
+        exportBtn.addEventListener('click', () => {
+            if (!designData.jsonData) {
+                showNotification('Önce bir tasarım oluşturun!', 'warning');
+                return;
+            }
+            
+            const jsonStr = JSON.stringify(designData.jsonData, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `mutfak-tasarimi-${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('JSON dosyası indirildi!', 'success');
+        });
+
+        // Örnek yükleme butonu işleyici
+        sampleBtn.addEventListener('click', () => {
+            // Örnek ölçüler
+            document.getElementById('wallA').value = '520';
+            document.getElementById('wallB').value = '420';
+            document.getElementById('ceilingHeight').value = '280';
+            document.getElementById('counterHeight').value = '92';
+            document.getElementById('baseDepth').value = '58';
+            document.getElementById('wallDepth').value = '32';
+            document.getElementById('doorWidth').value = '85';
+            document.getElementById('windowWidth').value = '140';
+            document.getElementById('fridgeWidth').value = '70';
+            document.getElementById('ovenWidth').value = '60';
+            document.getElementById('dishwasherWidth').value = '60';
+            document.getElementById('hoodWidth').value = '90';
+            
+            showNotification('Örnek ölçüler yüklendi!', 'info');
+        });
+
+        // Bildirim göster
+        function showNotification(message, type) {
+            // Mevcut bildirimleri kaldır
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.padding = '15px 20px';
+            notification.style.borderRadius = '8px';
+            notification.style.fontWeight = '600';
+            notification.style.zIndex = '1000';
+            notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+            notification.style.transition = 'all 0.3s';
+            
+            // Renkler
+            if (type === 'success') {
+                notification.style.backgroundColor = '#10b981';
+                notification.style.color = 'white';
+            } else if (type === 'warning') {
+                notification.style.backgroundColor = '#f59e0b';
+                notification.style.color = 'white';
+            } else if (type === 'info') {
+                notification.style.backgroundColor = '#3b82f6';
+                notification.style.color = 'white';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // 3 saniye sonra kaldır
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateY(-10px)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Uygulama başlangıç ayarları
+        window.addEventListener('DOMContentLoaded', () => {
+            // Örnek tasarım oluştur
+            setTimeout(() => {
+                calculateBtn.click();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
