@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>ATHLETEΞVO | AI Performance Hub</title>
+    <!-- Fonts & Icons & Chart.js -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: radial-gradient(circle at 20% 30%, #0B0E17, #05070C);
+            color: #EDF2F8;
+            line-height: 1.4;
+            min-height: 100vh;
+            padding: 24px 20px 48px;
+        }
+
+        /* Custom Scroll */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #141A24; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #3C4F76; border-radius: 10px; }
+
+        .glass-panel {
+            background: rgba(18, 25, 40, 0.65);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(72, 187, 255, 0.18);
+            border-radius: 32px;
+        }
+
+        .dashboard {
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .neo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 16px 28px;
+            background: rgba(8, 14, 23, 0.8);
+            backdrop-filter: blur(16px);
+            border-radius: 60px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(74, 144, 226, 0.3);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .logo-area h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(125deg, #FFFFFF, #6C9EFF, #B77CFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+        }
+        .logo-area span {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+
+        /* Grids */
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        .metric-card {
+            background: linear-gradient(145deg, #10161F, #0A0F17);
+            border-radius: 32px;
+            padding: 20px 22px;
+            transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid #202838;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+        .metric-card:hover {
+            transform: translateY(-5px);
+            border-color: #3E6B9E;
+            box-shadow: 0 18px 30px -12px rgba(0,160,255,0.2);
+        }
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            color: #6C9EFF;
+        }
+        .metric-value {
+            font-size: 2.3rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .progress-glow {
+            background: #1E293B;
+            border-radius: 40px;
+            height: 8px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+        .progress-glow-fill {
+            background: linear-gradient(90deg, #4F9EFF, #B77CFF);
+            width: 0%;
+            height: 100%;
+            border-radius: 40px;
+            transition: width 0.3s;
+        }
+
+        .two-col-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+            margin-bottom: 32px;
+        }
+        @media (max-width: 800px) { .two-col-grid { grid-template-columns: 1fr; } }
+
+        .glass-card {
+            background: rgba(12, 19, 29, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 36px;
+            padding: 24px;
+            border: 1px solid rgba(72, 187, 255, 0.2);
+        }
+
+        .ai-oracle {
+            background: linear-gradient(135deg, #0F1825, #0A0F1A);
+            border-left: 4px solid #FFA569;
+            border-radius: 28px;
+            padding: 20px;
+            margin-top: 12px;
+        }
+
+        button {
+            background: rgba(48, 86, 142, 0.8);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Space Grotesk', sans-serif;
+            backdrop-filter: blur(4px);
+        }
+        button:hover {
+            background: #2C5A96;
+            transform: scale(0.96);
+            letter-spacing: 0.3px;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #4F7EB3;
+        }
+        .badge {
+            background: #1F2C42;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        input, select {
+            background: #0F1620;
+            border: 1px solid #2C3A55;
+            border-radius: 24px;
+            padding: 10px 14px;
+            color: white;
+            font-family: inherit;
+            outline: none;
+            transition: 0.2s;
+        }
+        input:focus, select:focus { border-color: #6C9EFF; }
+
+        .workout-row {
+            background: #10161F;
+            margin: 12px 0;
+            padding: 14px 18px;
+            border-radius: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        canvas { max-height: 180px; width: 100%; margin-top: 12px; }
+
+        .exercise-library {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .ex-card {
+            background: #111722;
+            border-radius: 28px;
+            padding: 14px;
+            width: 180px;
+            transition: 0.2s;
+            border: 1px solid #2D3648;
+        }
+        .ex-card i { font-size: 2rem; margin-bottom: 8px; color: #84B2FF; }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            opacity: 0.5;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard" id="athleteRoot"></div>
+
+<script>
+    // -------------------- PROFESSIONAL PROTOTYPE --------------------
+    // STATE MANAGEMENT with LOCALSTORAGE & MODULAR UPDATES
+    let activeUser = null;
+
+    const DEFAULT_ATHLETE_DATA = {
+        profile: { name: "Eliot", age: 26, height: 182, weight: 79.2, goal: "güç", level: "İleri Seviye" },
+        daily: { caloriesConsumed: 1840, caloriesGoal: 2750, water: 2100, waterGoal: 3000, sleep: 7.8, fatigue: 32 },
+        meals: [],
+        workouts: [
+            { name: "Deadlift", sets: 4, reps: 6, completed: false },
+            { name: "Overhead Press", sets: 4, reps: 8, completed: false },
+            { name: "Barbell Row", sets: 4, reps: 10, completed: false },
+            { name: "Leg Press", sets: 3, reps: 12, completed: false }
+        ],
+        history: {
+            weightLog: [79.2, 79.0, 78.6, 78.9, 78.5, 78.8, 79.1],
+            performanceScore: [68, 72, 70, 75, 78, 82, 84],
+            waterHistory: [1900, 2100, 2350, 2550, 2700, 2850, 2100]
+        }
+    };
+
+    // helpers
+    function getUserKey(user) { return `athlete_evo_${user}`; }
+
+    function loadUserData(username) {
+        const raw = localStorage.getItem(getUserKey(username));
+        if (raw) return JSON.parse(raw);
+        const fresh = JSON.parse(JSON.stringify(DEFAULT_ATHLETE_DATA));
+        fresh.profile.name = username;
+        if (fresh.profile.goal === "güç") fresh.daily.caloriesGoal = 2850;
+        else if (fresh.profile.goal === "kas") fresh.daily.caloriesGoal = 2950;
+        else fresh.daily.caloriesGoal = 2450;
+        return fresh;
+    }
+
+    function syncUserData(data) {
+        if (!activeUser) return;
+        localStorage.setItem(getUserKey(activeUser), JSON.stringify(data));
+        renderProfessionalUI();
+    }
+
+    function getCurrentData() { return activeUser ? loadUserData(activeUser) : null; }
+
+    // Domain actions
+    function addMealProfessional(name, kcal, prot, carbs, fat) {
+        const data = getCurrentData();
+        if (!data) return;
+        data.meals.push({ name, calories: +kcal, protein: +prot, carbs: +carbs, fat: +fat });
+        let total = 0;
+        data.meals.forEach(m => total += m.calories);
+        data.daily.caloriesConsumed = total;
+        syncUserData(data);
+    }
+
+    function toggleWorkout(idx) {
+        const data = getCurrentData();
+        if (data) {
+            data.workouts[idx].completed = !data.workouts[idx].completed;
+            let fatigueDelta = data.workouts[idx].completed ? 4 : -2;
+            data.daily.fatigue = Math.min(100, Math.max(0, data.daily.fatigue + fatigueDelta));
+            syncUserData(data);
+        }
+    }
+
+    function updateWater(deltaML) {
+        const data = getCurrentData();
+        if (data) {
+            data.daily.water = Math.min(6000, Math.max(0, data.daily.water + deltaML));
+            data.history.waterHistory.push(data.daily.water);
+            if (data.history.waterHistory.length > 7) data.history.waterHistory.shift();
+            syncUserData(data);
+        }
+    }
+
+    function updateSleep(value) {
+        const data = getCurrentData();
+        if (data) {
+            data.daily.sleep = parseFloat(value);
+            if (value < 6) data.daily.fatigue = Math.min(100, data.daily.fatigue + 7);
+            else if (value > 8.5) data.daily.fatigue = Math.max(0, data.daily.fatigue - 6);
+            syncUserData(data);
+        }
+    }
+
+    function updateProfileFull(age, height, weight, goal, level) {
+        const data = getCurrentData();
+        if (data) {
+            data.profile.age = +age;
+            data.profile.height = +height;
+            data.profile.weight = +weight;
+            data.profile.goal = goal;
+            data.profile.level = level;
+            if (goal === "kas") data.daily.caloriesGoal = 2950;
+            else if (goal === "güç") data.daily.caloriesGoal = 2850;
+            else data.daily.caloriesGoal = 2450;
+            data.history.weightLog.push(+weight);
+            if (data.history.weightLog.length > 7) data.history.weightLog.shift();
+            syncUserData(data);
+        }
+    }
+
+    // ADVANCED AI COACH (if-else logic + dynamic feedback)
+    function getAICoachInsight(data) {
+        if (!data) return "Bağlantı kurulamadı, giriş yapınız.";
+        const d = data.daily, p = data.profile;
+        let msg = "";
+        const proteinIntake = data.meals.reduce((sum, m) => sum + (m.protein || 0), 0);
+        if (d.caloriesConsumed < d.caloriesGoal - 600) msg += "⚠️ Enerji açığı yüksek, kas kaybını önlemek için 300-400kcal ekle (fındık, avokado, tam tahıl). ";
+        else if (d.caloriesConsumed > d.caloriesGoal + 400) msg += "📈 Hedef kalori aşımı var. Karbonhidratı biraz azaltıp protein sabit tut. ";
+        else msg += "✅ Kalori dengesi optimal. ";
+
+        if (d.water < d.waterGoal - 800) msg += "💧 Dehidrasyon performansı düşürür. Hemen 500ml su için! ";
+        else if (d.water >= d.waterGoal) msg += "🚰 Mükemmel hidrasyon, rejenerasyon artar. ";
+
+        if (d.fatigue > 70) msg += "🧘‍♂️ AŞIRI YORGUNLUK: Dinlenme günü veya hafif esneme önerilir. ";
+        else if (d.sleep < 6.2) msg += "😴 Uyku süresi yetersiz, büyüme hormonu azalır. Erken yat! ";
+
+        if (p.goal === "güç" && proteinIntake < 130) msg += "🏋️‍♂️ Kas gücü için protein hedefin 1.8g/kg (şu an düşük). Yumurta, et ekle. ";
+        if (p.goal === "kas" && proteinIntake < 120) msg += "💪 Hipertrofi için protein alımını artır. Tavuk göğsü veya whey ekleyin. ";
+
+        if (msg === "") msg = "🏆 Harika! Antrenmana odaklan, iyi iş çıkarıyorsun! ";
+        return `🧬 A.I. PERFORMANCE COACH 🧬: ${msg}`;
+    }
+
+    function getSmartWorkoutTip(data) {
+        if (!data) return "Giriş yaparak kişisel öneri alın.";
+        if (data.daily.fatigue > 68) return "⚠️ Düşük yoğunluklu antrenman (yüzme, yürüyüş) ve mobilite çalışması önerilir.";
+        if (data.profile.goal === "güç") return "🏋️‍♂️ CNS uyarımı: 3-5 tekrarlı ağırlık kaldırma (deadlift, squat) bugün idealdir.";
+        if (data.profile.goal === "kas") return "🔥 Hipertrofi: 8-12 tekrar, setler arası 60 saniye dinlenme, drop-set deneyebilirsin.";
+        return "⚡ Kondisyon: interval koşu veya devre antrenmanı metabolizmayı hızlandırır.";
+    }
+
+    // Charts Instances
+    let weightChart, perfChart, hydroChart;
+    function renderCharts(weightArr, perfArr, waterArr) {
+        const wCtx = document.getElementById('proWeightChart')?.getContext('2d');
+        const pCtx = document.getElementById('proPerfChart')?.getContext('2d');
+        const hCtx = document.getElementById('proWaterChart')?.getContext('2d');
+        if (weightChart) weightChart.destroy();
+        if (perfChart) perfChart.destroy();
+        if (hydroChart) hydroChart.destroy();
+        if (wCtx) weightChart = new Chart(wCtx, { type: 'line', data: { labels: ['H-6','H-5','H-4','H-3','H-2','Dün','Bugün'], datasets: [{ label: 'Vücut (kg)', data: weightArr, borderColor: '#FFB347', borderWidth: 3, pointBackgroundColor: '#FFA059', tension: 0.2 }] }, options: { responsive: true, maintainAspectRatio: true } });
+        if (pCtx) perfChart = new Chart(pCtx, { type: 'radar', data: { labels: ['Patlayıcılık','Dayanıklılık','Kuvvet','Mobilite','Toparlanma'], datasets: [{ label: 'Performans (demo)', data: [78, 65, 82, 70, 72], backgroundColor: 'rgba(108,158,255,0.2)', borderColor: '#4F9EFF' }] }, options: { responsive: true, maintainAspectRatio: true } });
+        if (hCtx) hydroChart = new Chart(hCtx, { type: 'bar', data: { labels: ['G-6','G-5','G-4','G-3','G-2','Dün','Bugün'], datasets: [{ label: 'Su (ml)', data: waterArr, backgroundColor: '#3B82F6', borderRadius: 12 }] } });
+    }
+
+    // Login Logic
+    function attemptLogin(username) {
+        if (!username.trim()) return false;
+        activeUser = username.trim();
+        renderProfessionalUI();
+        return true;
+    }
+
+    function logoutSystem() { activeUser = null; renderProfessionalUI(); }
+
+    // MAIN RENDER ENGINE
+    function renderProfessionalUI() {
+        const root = document.getElementById('athleteRoot');
+        if (!activeUser) {
+            root.innerHTML = `
+                <div class="neo-header" style="justify-content: center;">
+                    <div class="logo-area"><h1>ATHLETEΞVO</h1><span>NEXT-GEN AI HUB</span></div>
+                </div>
+                <div class="glass-card" style="max-width: 500px; margin: 60px auto; text-align: center;">
+                    <i class="fas fa-brain" style="font-size: 3rem; color: #6C9EFF;"></i>
+                    <h2 style="margin: 20px 0;">Biometric Gateway</h2>
+                    <input type="text" id="accessUsername" placeholder="Atlet ID (ör: 'leo' / 'zeynep')" style="width: 100%; margin-bottom: 20px;">
+                    <button id="authEnterBtn" style="width: 100%; padding: 14px;">⟳  Bağlan / Kayıt Ol</button>
+                    <p style="margin-top: 30px; font-size: 12px;">⚡ LocalStorage tabanlı simülasyon - premium prototip</p>
+                </div>
+            `;
+            document.getElementById('authEnterBtn')?.addEventListener('click', () => {
+                const val = document.getElementById('accessUsername')?.value;
+                if (val) attemptLogin(val);
+            });
+            return;
+        }
+
+        const data = getCurrentData();
+        if (!data) return;
+        const d = data.daily, p = data.profile, meals = data.meals, workouts = data.workouts, hist = data.history;
+        const caloriePercent = (d.caloriesConsumed / d.caloriesGoal) * 100;
+        const waterPercent = (d.water / d.waterGoal) * 100;
+        const macroTot = meals.reduce((acc, m) => {
+            acc.protein += m.protein || 0; acc.carbs += m.carbs || 0; acc.fat += m.fat || 0;
+            return acc;
+        }, { protein: 0, carbs: 0, fat: 0 });
+        const aiMsg = getAICoachInsight(data);
+        const workTip = getSmartWorkoutTip(data);
+
+        root.innerHTML = `
+            <div class="neo-header">
+                <div class="logo-area"><h1>ATHLETEΞVO</h1><span>AI PERFORMANCE CORE</span></div>
+                <div style="display: flex; gap: 15px; align-items: center;"><i class="fas fa-user-astronaut"></i> <strong>${p.name}</strong> <button id="proLogoutBtn" style="background: #2C2F42;"><i class="fas fa-sign-out-alt"></i> Exit</button></div>
+            </div>
+            <div class="grid-4">
+                <div class="metric-card"><div class="card-icon"><i class="fas fa-fire-flame-curved"></i></div><div class="metric-value">${d.caloriesConsumed} / ${d.caloriesGoal} kcal</div><div class="progress-glow"><div class="progress-glow-fill" style="width: ${Math.min(100,caloriePercent)}%"></div></div><span style="font-size:12px;">Günlük hedef</span></div>
+                <div class="metric-card"><div class="card-icon"><i class="fas fa-droplet"></i></div><div class="metric-value">${d.water} ml</div><div class="progress-glow"><div class="progress-glow-fill" style="width: ${Math.min(100,waterPercent)}%"></div></div><div><button id="waterAdd250" style="padding: 4px 12px;">+250ml</button> <button id="waterAdd500" style="padding: 4px 12px;">+500ml</button></div></div>
+                <div class="metric-card"><div class="card-icon"><i class="fas fa-bed"></i></div><div class="metric-value">${d.sleep} h</div><div><input type="number" id="sleepInputPro" step="0.5" value="${d.sleep}" style="width: 90px;"><button id="sleepSyncBtn">Güncelle</button></div><div class="badge">Yorgunluk: ${d.fatigue}%</div></div>
+                <div class="metric-card"><div class="card-icon"><i class="fas fa-chart-line"></i></div><div class="metric-value">${p.weight} kg</div><div>Hedef: ${p.goal.toUpperCase()} • Seviye: ${p.level}</div></div>
+            </div>
+
+            <div class="two-col-grid">
+                <div class="glass-card"><h3><i class="fas fa-utensils"></i> Beslenme Zekası</h3><div class="badge">PROTEIN ${macroTot.protein}g / CARBS ${macroTot.carbs}g / FAT ${macroTot.fat}g</div><div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0;"><input id="mealNamePro" placeholder="Yemek" style="flex:1"><input id="kcalPro" placeholder="Kcal" size="5"><input id="proPro" placeholder="Pro(g)" size="4"><input id="carPro" placeholder="Car(g)" size="4"><button id="addMealAdvancedBtn">+Ekle</button></div><div id="professionalMealList"></div></div>
+                <div class="glass-card"><h3><i class="fas fa-dumbbell"></i> Akıllı Antrenman</h3><div id="workoutDynamicList"></div><div class="ai-oracle" style="margin-top: 15px;"><i class="fas fa-microchip"></i> ${workTip}</div></div>
+            </div>
+
+            <div class="two-col-grid">
+                <div class="glass-card"><h3><i class="fas fa-id-card"></i> Atlet Profili (Gelişmiş)</h3><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;"><label>Yaş</label><input id="profAge" value="${p.age}"><label>Boy cm</label><input id="profHeight" value="${p.height}"><label>Kilo</label><input id="profWeight" value="${p.weight}"><label>Hedef</label><select id="profGoal"><option ${p.goal==='güç' ? 'selected' : ''}>güç</option><option ${p.goal==='kas' ? 'selected' : ''}>kas</option><option ${p.goal==='dayanıklılık' ? 'selected' : ''}>dayanıklılık</option></select><label>Seviye</label><select id="profLevel"><option ${p.level==='Başlangıç' ? 'selected' : ''}>Başlangıç</option><option ${p.level==='Orta' ? 'selected' : ''}>Orta</option><option ${p.level==='İleri Seviye' ? 'selected' : ''}>İleri Seviye</option></select></div><button id="updateProfileBtn" style="margin-top: 16px; width:100%">🔄 Senkronize Et</button></div>
+                <div class="glass-card"><h3><i class="fas fa-robot"></i> AI Koç Sistemi</h3><div class="ai-oracle" style="background:#0A111D">${aiMsg}</div></div>
+            </div>
+
+            <div class="two-col-grid">
+                <div class="glass-card"><h3>📉 Vücut Kompozisyonu</h3><canvas id="proWeightChart"></canvas></div>
+                <div class="glass-card"><h3>⚡ Yetenek Radarı</h3><canvas id="proPerfChart"></canvas></div>
+            </div>
+            <div class="glass-card" style="margin-top: 0px;"><h3>💧 Hidrasyon Trendi (Son 7 Gün)</h3><canvas id="proWaterChart"></canvas></div>
+
+            <div class="glass-card" style="margin-top: 20px;"><h3><i class="fas fa-folder-open"></i> Eksiksiz Hareket Kütüphanesi</h3><div class="exercise-library"><div class="ex-card"><i class="fas fa-person-walking"></i><br/><strong>Squat</strong><br/>4x10<br/><span class="badge">Uzman</span></div><div class="ex-card"><i class="fas fa-hand-fist"></i><br/><strong>Bench Press</strong><br/>4x8<br/><span class="badge">Göğüs</span></div><div class="ex-card"><i class="fas fa-person-running"></i><br/><strong>Pull-Up</strong><br/>3xmax<br/><span class="badge">Sırt</span></div><div class="ex-card"><i class="fas fa-dumbbell"></i><br/><strong>Clean & Jerk</strong><br/>5x3<br/><span class="badge">Patlayıcı</span></div></div></div>
+            <footer>© ATHLETEΞVO — İleri simülasyon | LocalStorage demo | Gerçek AI sonra eklenecek</footer>
+        `;
+
+        // Event bindings
+        document.getElementById('proLogoutBtn')?.addEventListener('click', logoutSystem);
+        document.getElementById('waterAdd250')?.addEventListener('click', () => updateWater(250));
+        document.getElementById('waterAdd500')?.addEventListener('click', () => updateWater(500));
+        document.getElementById('sleepSyncBtn')?.addEventListener('click', () => { const val = document.getElementById('sleepInputPro')?.value; if(val) updateSleep(val); });
+        document.getElementById('addMealAdvancedBtn')?.addEventListener('click', () => {
+            const name = document.getElementById('mealNamePro')?.value || "Smart Meal";
+            const kcal = document.getElementById('kcalPro')?.value || 300;
+            const pro = document.getElementById('proPro')?.value || 20;
+            const car = document.getElementById('carPro')?.value || 25;
+            addMealProfessional(name, kcal, pro, car, 8);
+        });
+        document.getElementById('updateProfileBtn')?.addEventListener('click', () => {
+            const age = document.getElementById('profAge')?.value;
+            const height = document.getElementById('profHeight')?.value;
+            const weight = document.getElementById('profWeight')?.value;
+            const goal = document.getElementById('profGoal')?.value;
+            const level = document.getElementById('profLevel')?.value;
+            updateProfileFull(age, height, weight, goal, level);
+        });
+
+        const mealContainer = document.getElementById('professionalMealList');
+        if (mealContainer) mealContainer.innerHTML = meals.map(m => `<div style="background:#121C28; border-radius: 20px; padding: 8px 12px; margin: 6px 0; display: flex; justify-content: space-between;"><span>🍽️ ${m.name}</span><span>${m.calories} kcal | P:${m.protein} C:${m.carbs}</span></div>`).join('') || '<div class="badge">Henüz öğün yok, eklemek için yukarıdaki alanı kullan.</div>';
+        
+        const workoutDiv = document.getElementById('workoutDynamicList');
+        if (workoutDiv) workoutDiv.innerHTML = workouts.map((w, idx) => `<div class="workout-row"><div><strong>${w.name}</strong>  ${w.sets}x${w.reps}</div><button data-wid="${idx}" style="background: ${w.completed ? '#2C5A55' : '#2F3E5E'};">${w.completed ? '✔ Tamamlandı' : '⚡ Tamamla'}</button></div>`).join('');
+        document.querySelectorAll('[data-wid]').forEach(btn => { btn.addEventListener('click', (e) => { const idx = btn.getAttribute('data-wid'); toggleWorkout(parseInt(idx)); }); });
+
+        renderCharts(hist.weightLog, hist.performanceScore, hist.waterHistory);
+    }
+
+    renderProfessionalUI();
+</script>
+</body>
+</html>
